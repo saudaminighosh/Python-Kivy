@@ -1,0 +1,13 @@
+<helloWorld>:
+    myInput: inputID    
+    FloatLayout:
+        Button:
+            id: inputID
+            text: "[b]Welcome[/b]"
+            color: "FFFFFF"
+            markup: True
+            font_size: 40
+            size_hint: (2.5,.9)
+            background_color: (1,0,1,1)
+            pos_hint: {'center_x': 5.95,'center_y': 4.9}
+            on_release: root.printOut()
