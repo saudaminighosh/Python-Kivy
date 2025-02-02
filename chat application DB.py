@@ -24,18 +24,25 @@ class Chat(App):
             host='localhost',
             user='root',
             passwd='password123',
+            database='second_db',
         )
-        #Create cursor
+        #Create cursor for Database
         c=mydb.cursor()
         
         #Create an actual DB
         c.execute("CREATE DATABASE IF NOT EXISTS second_db")
         
-        #Check to see if DB works
-        c.execute("SHOW DATABASES")
+        #Check to see if DataBase works
+        #c.execute("SHOW DATABASES")
         
-        for db in c:
-            print(db)
+        #for db in c:
+        #    print(db)
+        
+        
+        #Create a table
+        c.execute("""CREATE TABLE if not exists customers(name VARCHAR(50))""")
+        mydb.commit()
+        mydb.close()
         
         '''self.l1=Label(text='[color=638C6D][b]Welcome ![/b]',font_size=70,markup=True,pos_hint={'center_x':0.5,'center_y':0.7})
         self.window.add_widget(self.l1)
@@ -242,6 +249,28 @@ class Chat(App):
                 self.warning=Label(text='[color=FF0000]Passwords are not matching ! Please Try Again',font_size=30,markup=True,pos_hint={'center_x':0.5,'center_y':0.30})
                 self.window.add_widget(self.warning)
         if flag1==0 and flag2==0:
+            mydb=mysql.connector.connect(
+            host='localhost',
+            user='root',
+            passwd='password123',
+            database = 'second_db',
+        )
+            #Create cursor for Database
+            c=mydb.cursor()
+            
+            #Add a record
+            sql_command="INSERT INTO customers (name) VALUES (%s)"
+            values=(self.input1.text, self.input2.text,)
+            
+            #Execute SQL command
+            c.execute(sql_command,values)
+            
+            #Commit our changes
+            mydb.commit()
+            
+            #Close connection
+            mydb.close()
+            
             self.user.append(self.input1.text)
             self.pas.append(self.input2.text)
             self.regSuccess()
