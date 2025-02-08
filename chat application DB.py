@@ -23,14 +23,13 @@ class Chat(App):
         mydb=mysql.connector.connect(
             host='localhost',
             user='root',
-            passwd='password123',
-            database='second_db',
+            passwd='password123'
         )
         #Create cursor for Database
         c=mydb.cursor()
         
         #Create an actual DB
-        c.execute("CREATE DATABASE IF NOT EXISTS second_db")
+        c.execute("CREATE DATABASE IF NOT EXISTS chat_app")
         
         #Check to see if DataBase works
         #c.execute("SHOW DATABASES")
@@ -40,7 +39,9 @@ class Chat(App):
         
         
         #Create a table
-        c.execute("""CREATE TABLE if not exists customers(name VARCHAR(50))""")
+        
+        c.execute("USE chat_app")
+        c.execute("""CREATE TABLE if not exists customers(name VARCHAR(50), password VARCHAR(50))""")
         mydb.commit()
         mydb.close()
         
@@ -239,6 +240,7 @@ class Chat(App):
                         tmp1=1
                         flag1=1
                         break
+                #Need to use db query to search username
                 if tmp1==1:
                     if self.warning: self.window.remove_widget(self.warning)
                     self.warning=Label(text='[color=FF0000]Username is already taken ! Please Try with a Different one',font_size=30,markup=True,pos_hint={'center_x':0.5,'center_y':0.30})
@@ -253,17 +255,22 @@ class Chat(App):
             host='localhost',
             user='root',
             passwd='password123',
-            database = 'second_db',
+            database = 'chat_app',
         )
             #Create cursor for Database
             c=mydb.cursor()
             
             #Add a record
-            sql_command="INSERT INTO customers (name) VALUES (%s)"
-            values=(self.input1.text, self.input2.text,)
+            
+            sql_command="INSERT INTO customers (name,password) VALUES (%s,%s)"
+            values=(self.input1.text,self.input2.text)
+          
+            c.execute(sql_command,values)
+              
             
             #Execute SQL command
-            c.execute(sql_command,values)
+            #c.execute(sql_command1,values)
+            
             
             #Commit our changes
             mydb.commit()
