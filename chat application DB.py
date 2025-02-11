@@ -241,6 +241,21 @@ class Chat(App):
                         flag1=1
                         break
                 #Need to use db query to search username
+                mydb=mysql.connector.connect(
+                host='localhost',
+                user='root',
+                passwd='password123',
+                database = 'chat_app',)
+                
+                #Create cursor for Database
+                c=mydb.cursor()
+        
+                sql_command="SELECT name FROM customers WHERE customers.name=%s"
+                c.execute(sql_command,(self.input1.text,))
+                rec=c.fetchall()
+                if rec:
+                    tmp1=1
+                    flag1=1
                 if tmp1==1:
                     if self.warning: self.window.remove_widget(self.warning)
                     self.warning=Label(text='[color=FF0000]Username is already taken ! Please Try with a Different one',font_size=30,markup=True,pos_hint={'center_x':0.5,'center_y':0.30})
@@ -300,22 +315,7 @@ class Chat(App):
         self.logout=Button(text='[b]Logout[/b]',markup=True, font_size=30,size_hint=(.1,.07),pos_hint={'center_x':0.5,'center_y':0.45},background_color='#638C6D')
         self.logout.bind(on_press=self.logout2)
         self.window.add_widget(self.logout)
-        
-    '''def logout2(self,x):
-        if self.l3: self.window.remove_widget(self.l3)
-        if self.logout: self.window.remove_widget(self.logout)
-        if self.l6: self.window.remove_widget(self.l6)
-        self.l1=Label(text='[color=638C6D][b]Welcome ![/b]',font_size=70,markup=True,pos_hint={'center_x':0.5,'center_y':0.7})
-        self.window.add_widget(self.l1)
-        self.login=Button(text='[b]Login[/b]',markup=True, font_size=40,size_hint=(.2,.1),pos_hint={'center_x':0.5,'center_y':0.55},background_color='#638C6D')
-        self.login.bind(on_press=self.login2)
-        self.window.add_widget(self.login)
-        self.l2=Label(text='[color=638C6D][b]OR[/b]',font_size=45,markup=True,pos_hint={'center_x':0.5,'center_y':0.45})
-        self.window.add_widget(self.l2)
-        self.signup=Button(text='[b]Sign Up[/b]',markup=True, font_size=40,size_hint=(.2,.1),pos_hint={'center_x':0.5,'center_y':0.35},background_color='#638C6D')
-        self.signup.bind(on_press=self.register)
-        self.window.add_widget(self.signup)'''
-        
+
     def log(self,x):
         tmp3=0
         tmp4=0
@@ -332,13 +332,42 @@ class Chat(App):
                     tmp3=1
                     x=i
                     break
+            mydb=mysql.connector.connect(
+                host='localhost',
+                user='root',
+                passwd='password123',
+                database = 'chat_app',)
+                
+                #Create cursor for Database
+            c=mydb.cursor()
+            
+            #SQLQ to check whether username is already registered or not
+            sql_command="SELECT name FROM customers WHERE customers.name=%s"
+            c.execute(sql_command,(self.input1.text,))
+            rec=c.fetchall()
+            if rec:
+                tmp3=1
             if tmp3==0:
                 if self.l6: self.window.remove_widget(self.l6)
                 self.l6=Label(text='[color=FF0000]Username is not registered. Please sign in first.',font_size=40,markup=True,pos_hint={'center_x':0.5,'center_y':0.30})
                 self.window.add_widget(self.l6)
             else:
-                if self.pas[x]==self.input2.text:
-                    tmp4=1
+                '''if self.pas[x]==self.input2.text:
+                    tmp4=1'''
+                mydb=mysql.connector.connect(
+                host='localhost',
+                user='root',
+                passwd='password123',
+                database = 'chat_app',)
+                
+                #Create cursor for Database
+                c=mydb.cursor()
+                #SQLQ to check whether password matches with the given username
+                sql_command="SELECT password FROM customers WHERE customers.name=%s"
+                c.execute(sql_command,(self.input1.text,))
+                rec=c.fetchall()
+                if rec[0][0]==self.input2.text:
+                    tmp4=1    
                 if tmp4==0:
                     if self.l6: self.window.remove_widget(self.l6)
                     self.l6=Label(text='[color=FF0000]Wrong Password. Please try again.',font_size=40,markup=True,pos_hint={'center_x':0.5,'center_y':0.30})
